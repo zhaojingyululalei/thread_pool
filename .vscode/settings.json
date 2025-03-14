@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "plat.h": "c",
+        "stdlib.h": "c",
+        "threadpool.h": "c",
+        "stdio.h": "c",
+        "string.h": "c",
+        "debug.h": "c"
+    }
+}
