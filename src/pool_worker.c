@@ -58,10 +58,14 @@ void *pool_worker(void *arg)
 
         lock(&job_lock);
         job->ret = ret;
-        if(!job->is_readed){
-            //结果还没读的话，可以通知用户读取了
+        if(job->is_needret){
+            //如果用户需要读取返回值，那么就通知用户去读。用户读完后，设置job.isdone
             semaphore_post(&job->ret_sem);
+        }else{
+            //如果用户不需要返回值，直接设置is_done，manger回收Job_t
+            job->is_done = true;
         }
+        
         unlock(&job_lock);
 
         THREADPOOL_LOCK;
@@ -73,7 +77,7 @@ void *pool_worker(void *arg)
 
     }
     log_message(LOGLEVEL_INFO, "worker:%u exist", tid);
-    
+    worker->exsit_done = true;
     log_threadpool_status(pool);
     THREADPOOL_UNLOCK;
     thread_exit();

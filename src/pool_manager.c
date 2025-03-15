@@ -10,7 +10,7 @@
 /**
  * @brief 返回要增加的线程数量
  */
-int is_add_worker(threadpool_t* pool){
+static int is_add_worker(threadpool_t* pool){
     int job_cnt = pool->jobq.count;
     int busy_cnt = list_count(&pool->busy_list);
     int idle_cnt = list_count(&pool->idle_list);
@@ -24,7 +24,7 @@ int is_add_worker(threadpool_t* pool){
 /**
  * @brief 返回要减少的线程数
  */
-int is_desc_worker(threadpool_t* pool){
+static int is_desc_worker(threadpool_t* pool){
     int job_cnt = pool->jobq.count;
     int busy_cnt = list_count(&pool->busy_list);
     int idle_cnt = list_count(&pool->idle_list);
@@ -35,6 +35,40 @@ int is_desc_worker(threadpool_t* pool){
     }
     return desc_cnt;
 
+}
+static void manager_collect_workers(threadpool_t* pool){
+    list_node_t* cur = pool->cancle_list.first;
+    while (cur)
+    {
+        list_node_t* next = cur->next;
+        worker_t* worker = list_node_parent(cur,worker_t,lnode);
+        if(worker->exsit_done){
+            thread_join(worker->tid);
+            list_remove(&pool->cancle_list,&worker->lnode);
+            rb_tree_remove(&pool->worker_tree,worker);
+            worker_free(worker);
+            pool->thread_count--;
+        }
+
+        cur = next;
+    }
+    
+}
+static void manager_collect_jobs(void){
+    lock(&job_lock);
+    list_node_t* cur = job_list.first;
+    while (cur)
+    {
+        list_node_t* next = cur->next;
+        job_t* job = list_node_parent(cur,job_t,node);
+        if(job->is_done){
+            job_free(job);
+        }
+        
+        cur = next;
+    }
+    unlock(&job_lock);
+    
 }
 void* pool_manager(void* arg){
     threadpool_t* pool = (threadpool_t*)arg;
@@ -61,7 +95,10 @@ void* pool_manager(void* arg){
             log_threadpool_status(pool);
         }
 
-
+        //遍历cancle_list回收线程，回收worker_t
+        manager_collect_workers(pool);
+        //遍历job_list回收job_t
+        manager_collect_jobs();
         THREADPOOL_UNLOCK;
         //thread_yield();
         printf("i am manager is working\r\n");

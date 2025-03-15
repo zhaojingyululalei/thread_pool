@@ -207,6 +207,8 @@ static void rb_tree_remove_fix(rb_tree_t *tree, rb_node_t *x)
         if (x == x->parent->left)
         {
             rb_node_t *w = x->parent->right;
+            if (!w)
+                w = tree->nil;
             if (w->color == RED)
             {
                 w->color = BLACK;
@@ -434,25 +436,32 @@ void rb_tree_clear(rb_tree_t *tree)
  */
 rb_node_t *rb_tree_find_by(rb_tree_t *tree, const void *key, int (*compare_key)(const void *, const void *))
 {
-    if (!tree || !tree->root || tree->root == tree->nil) {
+    if (!tree || !tree->root || tree->root == tree->nil)
+    {
         return NULL; // 空树，直接返回 NULL
     }
 
     rb_node_t *x = tree->root;
 
-    while (x != tree->nil) {
+    while (x != tree->nil)
+    {
         void *node_data = tree->get_parent(x); // 获取节点数据
 
         // 调试输出，检查数据是否正确
-        //printf("Comparing key=%p with node_data=%p\n", key, node_data);
+        // printf("Comparing key=%p with node_data=%p\n", key, node_data);
 
         int cmp = compare_key(key, node_data); // 使用自定义比较函数
 
-        if (cmp == 0) {
+        if (cmp == 0)
+        {
             return x; // 找到匹配的节点
-        } else if (cmp < 0) {
+        }
+        else if (cmp < 0)
+        {
             x = x->left; // 在左子树中查找
-        } else {
+        }
+        else
+        {
             x = x->right; // 在右子树中查找
         }
     }

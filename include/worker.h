@@ -14,6 +14,7 @@ typedef enum {
 typedef struct {
     tid_t tid;
     worker_state_t state;
+    bool exsit_done; // 该线程 是否已经完全退出
     list_node_t lnode; //用于调度
     rb_node_t rbnode; //用于快速查找
 }worker_t;

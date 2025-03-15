@@ -67,11 +67,9 @@ job_t *threadpool_submit_job(threadpool_t *pool, job_type_t type, void *(*functi
     job->arg = arg;
     job->ret = NULL;
     semaphore_init(&job->ret_sem, 0);
-    if(need_ret){
-        job->is_readed = false; //用户还没有读返回值
-    }else{
-        job->is_readed = true; //运行完job直接删
-    }
+    job->is_needret = need_ret;
+    job->is_done =false;
+    job->is_readed = false;
     unlock(&job_lock);
     switch (type)
     {

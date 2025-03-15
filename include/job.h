@@ -15,11 +15,14 @@ typedef struct {
     void* (*function)(void*); // 任务函数
     void* arg;              // 任务参数
     void* ret;  //任务返回值
-    bool is_readed; //返回值是否已经读取，读了就删了job_t这个结构了
+    bool is_needret; //用户是否需要返回值
+    bool is_readed; //如果需要返回值，用户是否已经读取了返回值
+    bool is_done;//任务是否执行完毕
     list_node_t node;
 } job_t;
 extern job_t* job_buffer[MAX_JOB_CNT];
 extern lock_t job_lock;
+extern  list_t job_list;
 int job_init(void);
 
 job_t* job_alloc(void);
