@@ -9,13 +9,16 @@ void *pool_worker(void *arg)
 {
     int ret;
     threadpool_t *pool = (threadpool_t *)arg;
-    tid_t tid = gettid(); // 获取当前线程的线程id
 
+    tid_t tid = gettid(); // 获取当前线程的线程id
     THREADPOOL_LOCK;
 
-    rb_node_t* node = rb_tree_find_by(&pool->worker_tree, tid, worker_compare);
+    rb_node_t* node = rb_tree_find_by(&pool->worker_tree, &tid, worker_compare_by_key);
     worker_t* worker = rb_node_parent(node,worker_t,rbnode);
-    assert(worker != NULL); // 只要这个线程创建了，我肯定加入树中了
+    if(!worker){
+
+        assert(worker!=NULL);
+    }
     while (worker->state != WORKER_STATE_CANCLE)
     {
         

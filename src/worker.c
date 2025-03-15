@@ -12,6 +12,11 @@ int worker_compare(const void *a, const void *b)
     
     return  a_key-b_key ;
 }
+int worker_compare_by_key(const void* key,const void* b){
+    tid_t a_key = *((tid_t*)key);
+    tid_t b_key = ((worker_t *)b)->tid;
+    return a_key-b_key;
+}
 
 rb_node_t *worker_get_node(const void *data)
 {
@@ -69,4 +74,8 @@ void log_worker_list(const char* list_name, list_t* worker_list) {
 
         node = list_node_next(node);
     }
+}
+#include "debug.h"
+void debug_worker(worker_t* worker){
+    dbg_info("worker:0x%p,tid:%lu\r\n",worker,worker->tid);
 }
