@@ -7,7 +7,14 @@
 extern void* pool_worker(void*);
 extern void* pool_manager(void*);
 
-
+/**
+ * @brief 创建管理线程
+ */
+static int threadpool_create_manager(threadpool_t *pool)
+{
+    pool->manager = thread_create(pool_manager, pool);
+    return 0;
+}
 
 /**
  * @brief 工作线程执行完任务后，状态变为idle
@@ -37,8 +44,7 @@ int worker_set_busy(threadpool_t *pool, worker_t *worker)
 int worker_set_cancle(threadpool_t *pool, worker_t *worker)
 {
     //被唤醒后，先检查cancle标志，还没取任务，因此此时状态位idle才对
-    assert(worker->state == WORKER_STATE_IDLE);
-    worker->state = WORKER_STATE_CANCLE;
+    assert(worker->state == WORKER_STATE_CANCLE);
     list_remove(&pool->idle_list, &worker->lnode);
     list_insert_last(&pool->cancle_list, &worker->lnode);
     return 0;
@@ -84,9 +90,42 @@ job_t *threadpool_submit_job(threadpool_t *pool, job_type_t type, void *(*functi
     return job;
 }
 /**
+ * @brief 消灭一些线程
+ * @param n:消灭n个线程
+ */
+int threadpool_eliminate_workers(threadpool_t* pool,int n){
+    //遍历 idle_List队列，让n个worker的状态为cancle，并且唤醒全部idle_lsit中的线程
+    int idle_cnt = list_count(&pool->idle_list);
+    if(n <=0 || n >= idle_cnt ){
+        return -1;
+    }
+    list_node_t* cur = pool->idle_list.first;
+    for (int i = 0; i < idle_cnt; i++)
+    {
+        worker_t* worker = list_node_parent(cur,worker_t,lnode);
+        if(worker->state == WORKER_STATE_IDLE){
+            worker->state = WORKER_STATE_CANCLE;
+            n--;
+            if(n==0) break;
+        }
+        
+        cur = cur->next;
+    }
+    //idle_list中的线程全部唤醒
+    for (int i = 0; i < idle_cnt; i++)
+    {
+        semaphore_post(&pool->job_sem);
+    }
+    
+    
+}
+/**
  * @brief 创建工作线程
  */
 int threadpool_create_worker(threadpool_t* pool){
+    if(pool->thread_count + 1>=THREAD_POOL_MAX_SIZE){
+        return -1;
+    }
     tid_t tid = thread_create(pool_worker, pool);
 
     worker_t *worker = worker_alloc();
@@ -139,13 +178,11 @@ int threadpool_init(threadpool_t *pool)
     log_message(LOGLEVEL_INFO,"threadpool create %d init worker thread",THREAD_POOL_MIN_SIZE);
     log_threadpool_status(pool);
     pool->thread_count = THREAD_POOL_MIN_SIZE;
-    pool->idle_count = THREAD_POOL_MIN_SIZE;
-    pool->busy_count = 0;
 
     pool->state = THREAD_POOL_STATE_OPEN;
 
     // 创建管理线程
-    //threadpool_create_manager(pool);
+    threadpool_create_manager(pool);
     unlock(&pool->lock);
     return 0;
 }
@@ -154,9 +191,9 @@ void log_threadpool_status(threadpool_t* pool) {
 #ifdef THREADPOOL_LOG
     
 
-    log_message(LOGLEVEL_DEBUG, "Thread Pool State: %s, Threads: %d, Idle: %d, Busy: %d, Cancelling: %d,Tree:%d",
+    log_message(LOGLEVEL_DEBUG, "Thread Pool State: %s, Threads: %d, Idle: %d, Busy: %d, Cancelling: %d,Tree:%d,JOBS:%d",
                 (pool->state == THREAD_POOL_STATE_OPEN) ? "OPEN" : "CLOSED",
-                pool->thread_count, list_count(&pool->idle_list), list_count(&pool->busy_list), list_count(&pool->cancle_list),pool->worker_tree.count);
+                pool->thread_count, list_count(&pool->idle_list), list_count(&pool->busy_list), list_count(&pool->cancle_list),pool->worker_tree.count,pool->jobq.count);
 
     log_worker_list("Idle List", &pool->idle_list);
     log_worker_list("Busy List", &pool->busy_list);

@@ -11,7 +11,7 @@ static void* calc(void* arg){
     return 2*x;
 }
 void threadpool_test(void){
-    #define JOB_CNT_LEN 3
+    #define JOB_CNT_LEN 20
     int job_cnt = JOB_CNT_LEN;
     job_t* arr[JOB_CNT_LEN] ={0};
     for (int i = 0; i < job_cnt; i++)
@@ -24,6 +24,16 @@ void threadpool_test(void){
         int ret = (int)get_job_ret(arr[i]);
         printf("********************************get job ret = %d\r\n",ret);
     }
+
+    // lock(&pool.lock);
+    // threadpool_eliminate_workers(&pool,2);
+    // unlock(&pool.lock);
+    // sleep(2);
+
+    lock(&pool.lock);
+    log_threadpool_status(&pool);
+    unlock(&pool.lock);
+
 }
 int main(int argc, char const *argv[])
 {
@@ -36,8 +46,8 @@ int main(int argc, char const *argv[])
     
      threadpool_test();
     //pool_debug_all_list(&pool);
-    sleep(5);
-   // threadpool_test();
+    sleep(6);
+    threadpool_test();
     //pool_debug_all_list(&pool);
     printf("wait for collect child\r\n");
     while (true)

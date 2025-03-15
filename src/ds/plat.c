@@ -31,6 +31,11 @@ void thread_exit(void) {
     pthread_exit(NULL);
 }
 
+//让出cpu
+void thread_yield(void){
+    sched_yield();
+}
+
 // 互斥锁初始化
 void lock_init(lock_t* lock) {
     if (pthread_mutex_init(lock, NULL) != 0) {

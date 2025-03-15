@@ -49,7 +49,7 @@ void* get_job_ret(job_t* job){
     }
     
     
-    job->ret = ret;
+    ret = job->ret;
     job->is_readed = true;
     unlock(&job_lock);
     return ret;

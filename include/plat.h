@@ -27,7 +27,7 @@ tid_t thread_create(thread_routine func, void* arg);
 void thread_join(tid_t thread);
 void thread_detach(tid_t thread);
 void thread_exit(void);
-
+void thread_yield(void);
 // 互斥锁 API
 void lock_init(lock_t* mutex);
 void lock_destroy(lock_t* mutex);
