@@ -153,6 +153,7 @@ int rb_tree_insert(rb_tree_t *tree, void *data)
 
     // 修复树
     rb_tree_insert_fix(tree, node);
+    tree->count++;
     return 1;
 }
 

@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <semaphore.h>
 #include <string.h>
+#include <stdarg.h>
 
 typedef pthread_t tid_t;
 

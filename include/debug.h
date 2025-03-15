@@ -12,7 +12,7 @@
 #define DBG_LEVEL_INFO           3         // 开启错误、警告、一般信息输出
 
 /**设置信息输出等级，登记越高，输出的信息越多 */
-#define DBG_LEVEL_CTL_SET     0 
+#define DBG_LEVEL_CTL_SET     3
 
 /**
  * @brief 格式化日志并打印到串口

@@ -1,0 +1,51 @@
+[11:29:06 [INFO]  create one worker thread:4143973952
+[11:29:06 [INFO]  create one worker thread:4133488192
+[11:29:06 [INFO]  threadpool create 2 init worker thread
+[11:29:06 [DEBUG] Thread Pool State: CLOSED, Threads: 2, Idle: 2, Busy: 0, Cancelling: 0,Tree:2
+[11:29:06 [DEBUG] [Idle List]: Total Workers: 2
+[11:29:06 [DEBUG] [Idle List]: Worker base:0x55576d40,Worker TID: 140737337361984, State: IDLE
+[11:29:06 [DEBUG] [Idle List]: Worker base:0x55576d80,Worker TID: 140737326876224, State: IDLE
+[11:29:06 [DEBUG] [Busy List]: Total Workers: 0
+[11:29:06 [DEBUG] [Cancle List]: Total Workers: 0
+[11:29:06 [INFO]  worker:4143973952 get a job
+[11:29:06 [DEBUG] Thread Pool State: OPEN, Threads: 2, Idle: 1, Busy: 1, Cancelling: 0,Tree:2
+[11:29:06 [DEBUG] [Idle List]: Total Workers: 1
+[11:29:06 [DEBUG] [Idle List]: Worker base:0x55576d80,Worker TID: 140737326876224, State: IDLE
+[11:29:06 [DEBUG] [Busy List]: Total Workers: 1
+[11:29:06 [DEBUG] [Busy List]: Worker base:0x55576d40,Worker TID: 140737337361984, State: BUSY
+[11:29:06 [DEBUG] [Cancle List]: Total Workers: 0
+[11:29:06 [INFO]  worker:4133488192 get a job
+[11:29:06 [DEBUG] Thread Pool State: OPEN, Threads: 2, Idle: 0, Busy: 2, Cancelling: 0,Tree:2
+[11:29:06 [DEBUG] [Idle List]: Total Workers: 0
+[11:29:06 [DEBUG] [Busy List]: Total Workers: 2
+[11:29:06 [DEBUG] [Busy List]: Worker base:0x55576d40,Worker TID: 140737337361984, State: BUSY
+[11:29:06 [DEBUG] [Busy List]: Worker base:0x55576d80,Worker TID: 140737326876224, State: BUSY
+[11:29:06 [DEBUG] [Cancle List]: Total Workers: 0
+[11:29:09 [INFO]  worker:4143973952 finish a job
+[11:29:09 [DEBUG] Thread Pool State: OPEN, Threads: 2, Idle: 1, Busy: 1, Cancelling: 0,Tree:2
+[11:29:09 [DEBUG] [Idle List]: Total Workers: 1
+[11:29:09 [DEBUG] [Idle List]: Worker base:0x55576d40,Worker TID: 140737337361984, State: IDLE
+[11:29:09 [DEBUG] [Busy List]: Total Workers: 1
+[11:29:09 [DEBUG] [Busy List]: Worker base:0x55576d80,Worker TID: 140737326876224, State: BUSY
+[11:29:09 [DEBUG] [Cancle List]: Total Workers: 0
+[11:29:09 [INFO]  worker:4143973952 get a job
+[11:29:09 [DEBUG] Thread Pool State: OPEN, Threads: 2, Idle: 0, Busy: 2, Cancelling: 0,Tree:2
+[11:29:09 [DEBUG] [Idle List]: Total Workers: 0
+[11:29:09 [DEBUG] [Busy List]: Total Workers: 2
+[11:29:09 [DEBUG] [Busy List]: Worker base:0x55576d80,Worker TID: 140737326876224, State: BUSY
+[11:29:09 [DEBUG] [Busy List]: Worker base:0x55576d40,Worker TID: 140737337361984, State: BUSY
+[11:29:09 [DEBUG] [Cancle List]: Total Workers: 0
+[11:29:09 [INFO]  worker:4133488192 finish a job
+[11:29:09 [DEBUG] Thread Pool State: OPEN, Threads: 2, Idle: 1, Busy: 1, Cancelling: 0,Tree:2
+[11:29:09 [DEBUG] [Idle List]: Total Workers: 1
+[11:29:09 [DEBUG] [Idle List]: Worker base:0x55576d80,Worker TID: 140737326876224, State: IDLE
+[11:29:09 [DEBUG] [Busy List]: Total Workers: 1
+[11:29:09 [DEBUG] [Busy List]: Worker base:0x55576d40,Worker TID: 140737337361984, State: BUSY
+[11:29:09 [DEBUG] [Cancle List]: Total Workers: 0
+[11:29:12 [INFO]  worker:4143973952 finish a job
+[11:29:12 [DEBUG] Thread Pool State: OPEN, Threads: 2, Idle: 2, Busy: 0, Cancelling: 0,Tree:2
+[11:29:12 [DEBUG] [Idle List]: Total Workers: 2
+[11:29:12 [DEBUG] [Idle List]: Worker base:0x55576d80,Worker TID: 140737326876224, State: IDLE
+[11:29:12 [DEBUG] [Idle List]: Worker base:0x55576d40,Worker TID: 140737337361984, State: IDLE
+[11:29:12 [DEBUG] [Busy List]: Total Workers: 0
+[11:29:12 [DEBUG] [Cancle List]: Total Workers: 0
