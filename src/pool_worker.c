@@ -73,7 +73,7 @@ void *pool_worker(void *arg)
 
     }
     log_message(LOGLEVEL_INFO, "worker:%u exist", tid);
-    worker_set_cancle(pool,worker);
+    
     log_threadpool_status(pool);
     THREADPOOL_UNLOCK;
     thread_exit();

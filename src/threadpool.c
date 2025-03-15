@@ -44,7 +44,8 @@ int worker_set_busy(threadpool_t *pool, worker_t *worker)
 int worker_set_cancle(threadpool_t *pool, worker_t *worker)
 {
     //被唤醒后，先检查cancle标志，还没取任务，因此此时状态位idle才对
-    assert(worker->state == WORKER_STATE_CANCLE);
+    assert(worker->state == WORKER_STATE_IDLE);
+    worker->state = WORKER_STATE_CANCLE;
     list_remove(&pool->idle_list, &worker->lnode);
     list_insert_last(&pool->cancle_list, &worker->lnode);
     return 0;
@@ -99,17 +100,18 @@ int threadpool_eliminate_workers(threadpool_t* pool,int n){
     if(n <=0 || n >= idle_cnt ){
         return -1;
     }
-    list_node_t* cur = pool->idle_list.first;
-    for (int i = 0; i < idle_cnt; i++)
-    {
-        worker_t* worker = list_node_parent(cur,worker_t,lnode);
+    list_node_t* node = list_first(&pool->idle_list);
+    while (node) {
+        list_node_t* next = node->next;
+        worker_t* worker = list_node_parent(node, worker_t, lnode);
         if(worker->state == WORKER_STATE_IDLE){
-            worker->state = WORKER_STATE_CANCLE;
-            n--;
-            if(n==0) break;
+            worker_set_cancle(pool,worker);
+            if(--n==0){
+                break;
+            }
         }
-        
-        cur = cur->next;
+
+        node = next;
     }
     //idle_list中的线程全部唤醒
     for (int i = 0; i < idle_cnt; i++)
