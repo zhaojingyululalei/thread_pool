@@ -1,12 +1,12 @@
 #include "rb_tree.h"
 #include <string.h> // memcpy
-rb_node_t nil;
+static rb_node_t nil;
 // 初始化红黑树
 void rb_tree_init(rb_tree_t *tree, int capacity, uintptr_t compare, uintptr_t get_node, uintptr_t get_parent) {
     if (!tree) return;
 
     // 创建哨兵节点
-    tree->nil = (rb_node_t *)malloc(sizeof(rb_node_t));
+    tree->nil = &nil;
     tree->nil->color = BLACK; // 哨兵节点为黑色
     tree->nil->left = tree->nil->right = tree->nil->parent = tree->nil; // 指向自己
 
