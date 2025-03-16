@@ -25,7 +25,6 @@ typedef sem_t semaphore_t;
 // 线程 API
 tid_t thread_create(thread_routine func, void* arg);
 void thread_join(tid_t thread);
-void thread_detach(tid_t thread);
 void thread_exit(void);
 void thread_yield(void);
 // 互斥锁 API

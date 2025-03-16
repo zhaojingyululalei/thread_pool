@@ -18,13 +18,7 @@ void thread_join(tid_t thread) {
     }
 }
 
-// 线程分离
-void thread_detach(tid_t thread) {
-    if (pthread_detach(thread) != 0) {
-        perror("pthread_detach failed");
-        exit(EXIT_FAILURE);
-    }
-}
+
 
 // 线程退出
 void thread_exit(void) {
